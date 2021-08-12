@@ -1,0 +1,21 @@
+.grid {
+  width: 600px;
+  height: 600px;
+  margin: 200px auto;
+  display: grid;
+  grid-gap: 1px;
+  padding: 5px;
+  grid-template-columns: repeat(9, 1fr);
+  background-color: rgb(188, 214, 214);
+}
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  border: 1px solid black;
+  background-color: rgb(137, 137, 194);
+}
