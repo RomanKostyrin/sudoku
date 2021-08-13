@@ -1,48 +1,111 @@
-// module.exports = function solveSudoku(matrix) {
-//   let isCorrect = false
-//   let result = stepLine(matrix)
-//   while (!isCorrect) {
-//     result = stepLine(result)
-//     result = checkUniqueValue(result)
-//     isCorrect = checkArr(result)
-//   }
-//   return result
-// }
+module.exports = function solveSudoku(matrix) {
+  let isCorrect = false
+  let result = stepLine(matrix)
+  result = checkArrValue(result)
+  for (let i = 0; i < 2; i++) {
+    tact(result)
+    isCorrect = checkArr(result)
+    if (isCorrect) {
+      console.log('correct!')
+      return result
+    }
+  }
 
-let cell = document.querySelectorAll('.cell')
+  const longestArray = tryToGuess(result)
+  let tempResult = copyArray(result)
+  let lengthArr = result[longestArray[1][0]][longestArray[1][1]].length
+  for (let k = 0; k < lengthArr; k++) {
+    let val = result[longestArray[1][0]][longestArray[1][1]][k]
+    result[longestArray[1][0]][longestArray[1][1]] = val
+    for (let h = 0; h < 11; h++) {
+      tact(result)
+      isCorrect = checkArr(result)
+      if (h === 10) {
+        const longestArray2 = tryToGuess(result)
+        let tempResult2 = copyArray(result)
+        let lengthArr2 = result[longestArray2[1][0]][longestArray2[1][1]].length
+        let val = result[longestArray2[1][0]][longestArray2[1][1]][k]
+        result[longestArray2[1][0]][longestArray2[1][1]] = val
+        console.log(result[longestArray2[1][0]][longestArray2[1][1]])
+        for (let n = 0; n < lengthArr2; n++) {
+          tact(result)
+          isCorrect = checkArr(result)
+          if (isCorrect) {
+            console.log('correct!')
+            return result
+          }
+          if (n === 11) {
+            const longestArray3 = tryToGuess(result)
+            let tempResult3 = copyArray(result)
+            let lengthArr3 =
+              result[longestArray3[1][0]][longestArray3[1][1]].length
+            let val = result[longestArray3[1][0]][longestArray3[1][1]][k]
+            result[longestArray3[1][0]][longestArray3[1][1]] = val
+            console.log(result[longestArray3[1][0]][longestArray3[1][1]])
+            for (let u = 0; u < lengthArr3; u++) {
+              tact(result)
+              isCorrect = checkArr(result)
+              if (isCorrect) {
+                console.log('correct!')
+                return result
+              }
+              if (n === 11) {
+                const longestArray4 = tryToGuess(result)
+                let tempResult4 = copyArray(result)
+                let lengthArr4 =
+                  result[longestArray4[1][0]][longestArray4[1][1]].length
+                let val = result[longestArray4[1][0]][longestArray4[1][1]][k]
+                result[longestArray4[1][0]][longestArray3[1][1]] = val
+                console.log(result[longestArray4[1][0]][longestArray4[1][1]])
+                for (let f = 0; f < lengthArr4; f++) {
+                  tact(result)
+                  isCorrect = checkArr(result)
+                  if (isCorrect) {
+                    console.log('correct!')
+                    return result
+                  }
+                }
+                result = copyArray(tempResult4)
+              }
+            }
+            result = copyArray(tempResult3)
+          }
+        }
+        result = copyArray(tempResult2)
+      }
+    }
+    if (isCorrect) {
+      console.log('correct!')
+      return result
+    }
+    result = copyArray(tempResult)
+  }
+}
+
+// let cell = document.querySelectorAll('.cell')
 const fullArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 const initial = [
-  [6, 5, 0, 7, 3, 0, 0, 8, 0],
-  [0, 0, 0, 4, 8, 0, 5, 3, 0],
-  [8, 4, 0, 9, 2, 5, 0, 0, 0],
-  [0, 9, 0, 8, 0, 0, 0, 0, 0],
-  [5, 3, 0, 2, 0, 9, 6, 0, 0],
-  [0, 0, 6, 0, 0, 0, 8, 0, 0],
-  [0, 0, 9, 0, 0, 0, 0, 0, 6],
-  [0, 0, 7, 0, 0, 0, 0, 5, 0],
-  [1, 6, 5, 3, 9, 0, 4, 7, 0],
+  [8, 7, 0, 0, 0, 0, 6, 5, 2],
+  [0, 0, 0, 0, 7, 2, 4, 0, 0],
+  [0, 3, 2, 0, 5, 0, 0, 0, 0],
+  [0, 0, 8, 0, 0, 5, 3, 0, 4],
+  [6, 0, 0, 9, 0, 3, 0, 0, 0],
+  [0, 1, 3, 7, 0, 0, 0, 0, 0],
+  [5, 0, 9, 4, 0, 7, 0, 0, 0],
+  [3, 0, 0, 1, 0, 9, 0, 7, 0],
+  [1, 2, 0, 0, 0, 6, 0, 4, 9],
 ]
 
-function showSudoku(init) {
-  let counter = 0
-  init.forEach((el, index) => {
-    el.forEach((value, ind) => {
-      cell[counter].innerHTML = value
-      counter++
-    })
-  })
-}
-
-function showSudokuTypeOf(init) {
-  let counter = 0
-  init.forEach((el, index) => {
-    el.forEach((value, ind) => {
-      cell[counter].innerHTML = typeof value
-      counter++
-    })
-  })
-}
+// function showSudoku(init) {
+//   let counter = 0
+//   init.forEach((el, index) => {
+//     el.forEach((value, ind) => {
+//       cell[counter].innerHTML = value
+//       counter++
+//     })
+//   })
+// }
 
 function stepLine(init) {
   let tempArr = [...init]
@@ -78,6 +141,8 @@ function stepLine(init) {
 
           if (tempLittleArr.indexOf(verticalNumber) !== -1) {
             tempLittleArr.splice(tempLittleArr.indexOf(verticalNumber), 1)
+            // console.log(verticalNumber)
+            // console.log(tempLittleArr)
           }
         }
       }
@@ -85,7 +150,7 @@ function stepLine(init) {
       tempArr[index][el] = tempLittleArr
     })
   })
-
+  tempArr = checkArrValue(tempArr)
   return stepQube(tempArr)
 }
 
@@ -131,7 +196,6 @@ function stepQube(arr) {
   }
 
   arr = checkArrValue(arr)
-
   return arr
 }
 
@@ -204,10 +268,13 @@ function checkArr(array) {
   let answer = true
   array.forEach((el, index) => {
     el.forEach((value, ind) => {
-      if (Array.isArray(array[index][ind])) {
+      if (typeof array[index][ind] !== 'number') {
         answer = false
       }
     })
+    if (el.reduce((acc, el) => acc + el) !== 45) {
+      answer = false
+    }
   })
   return answer
 }
@@ -215,12 +282,137 @@ function checkArr(array) {
 function solveSudoku(initial) {
   let isCorrect = false
   let result = stepLine(initial)
-  while (!isCorrect) {
-    result = stepLine(result)
-    result = checkUniqueValue(result)
-    showSudoku(result)
+  result = checkArrValue(result)
+  for (let i = 0; i < 2; i++) {
+    tact(result)
     isCorrect = checkArr(result)
+    if (isCorrect) {
+      console.log('correct!')
+      return result
+    }
   }
+
+  const longestArray = tryToGuess(result)
+  let tempResult = copyArray(result)
+  let lengthArr = result[longestArray[1][0]][longestArray[1][1]].length
+  for (let k = 0; k < lengthArr; k++) {
+    let val = result[longestArray[1][0]][longestArray[1][1]][k]
+    result[longestArray[1][0]][longestArray[1][1]] = val
+    for (let h = 0; h < 11; h++) {
+      tact(result)
+      isCorrect = checkArr(result)
+      if (h === 10) {
+        const longestArray2 = tryToGuess(result)
+        let tempResult2 = copyArray(result)
+        let lengthArr2 = result[longestArray2[1][0]][longestArray2[1][1]].length
+        let val = result[longestArray2[1][0]][longestArray2[1][1]][k]
+        result[longestArray2[1][0]][longestArray2[1][1]] = val
+        for (let n = 0; n < lengthArr2; n++) {
+          tact(result)
+          isCorrect = checkArr(result)
+          if (isCorrect) {
+            console.log(result)
+            return result
+          }
+          if (n === 11) {
+            const longestArray3 = tryToGuess(result)
+            let tempResult3 = copyArray(result)
+            let lengthArr3 =
+              result[longestArray3[1][0]][longestArray3[1][1]].length
+            let val = result[longestArray3[1][0]][longestArray3[1][1]][k]
+            result[longestArray3[1][0]][longestArray3[1][1]] = val
+            console.log(result[longestArray3[1][0]][longestArray3[1][1]])
+            for (let u = 0; u < lengthArr3; u++) {
+              tact(result)
+              isCorrect = checkArr(result)
+              if (isCorrect) {
+                console.log('correct!')
+                return result
+              }
+              if (n === 11) {
+                const longestArray4 = tryToGuess(result)
+                let tempResult4 = copyArray(result)
+                let lengthArr4 =
+                  result[longestArray4[1][0]][longestArray4[1][1]].length
+                let val = result[longestArray4[1][0]][longestArray4[1][1]][k]
+                result[longestArray4[1][0]][longestArray3[1][1]] = val
+                console.log(result[longestArray4[1][0]][longestArray4[1][1]])
+                for (let f = 0; f < lengthArr4; f++) {
+                  tact(result)
+                  isCorrect = checkArr(result)
+                  if (isCorrect) {
+                    console.log('correct!')
+                    return result
+                  }
+                }
+                result = copyArray(tempResult4)
+              }
+            }
+            result = copyArray(tempResult3)
+          }
+        }
+        result = copyArray(tempResult2)
+      }
+    }
+    if (isCorrect) {
+      console.log(result)
+      return result
+    }
+    result = copyArray(tempResult)
+  }
+}
+
+function copyArray(mainArr) {
+  const tempArr = []
+  for (let key in mainArr) {
+    if (typeof mainArr[key] === 'object') {
+      tempArr[key] = copyArray(mainArr[key])
+    } else {
+      tempArr[key] = mainArr[key]
+    }
+  }
+  return tempArr
+}
+
+function tryToGuess(result) {
+  let long = 0
+  let coord = [0, 0]
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (Array.isArray(result[i][j])) {
+        if (result[i][j].length > long) {
+          long = result[i][j].length
+          coord = [i, j]
+        }
+      }
+    }
+  }
+  return [long, coord]
+}
+
+function tact(result) {
+  return new Promise(function (resolve) {
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    result = checkUniqueValue(result)
+    result = checkArrValue(result)
+    result = stepLine(result)
+    result = checkArrValue(result)
+    // showSudoku(result)
+    setTimeout(() => resolve(result), 100)
+  })
 }
 
 solveSudoku(initial)
